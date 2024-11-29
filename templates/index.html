@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Network</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"/>
+</head>
+<body>
+    <h1>Social Network</h1>
+
+    <form method="POST">
+        <label for="name">Name:</label>
+        <input type="text" name="name" required>
+        <label for="email">Email:</label>
+        <input type="email" name="email" required>
+        <label for="bio">Bio:</label>
+        <input type="text" name="bio" required>
+        <button type="submit">Add User</button>
+    </form>
+
+    <h2>Users</h2>
+    {% for user in users %}
+    <div>
+        <p>{{ user.name }} ({{ user.email }})</p>
+        <form method="POST" action="{{ url_for('follow', user_id=user['_id']) }}">
+            <input type="hidden" name="current_user_id" value="{{ current_user_id }}">
+            <button type="submit">Follow</button>
+        </form>
+        <a href="{{ url_for('posts', user_id=user['_id']) }}">View Posts</a>
+    </div>
+    {% endfor %}
+</body>
+</html>
