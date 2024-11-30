@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Edit Post</title>
+</head>
+<body>
+    <h1>Edit Post</h1>
+    <form action="/update_post/{{ post['post_id'] }}" method="POST" class="form-container">
+        <label for="content">Content:</label>
+        <textarea id="content" name="content" required>{{ post['content'] }}</textarea>
+
+        <label for="likes">Likes (comma-separated user IDs):</label>
+        <input type="text" id="likes" name="likes" value="{{ ', '.join(post['likes']) }}">
+
+        <button type="submit" class="submit-button">Update Post</button>
+    </form>
+</body>
+</html>

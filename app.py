@@ -141,6 +141,43 @@ def get_posts():
     return render_template('posts_list.html', posts=posts)  # Передаємо пости у шаблон
 
 
+@app.route('/edit_post/<post_id>', methods=['GET'])
+def edit_post_form(post_id):
+    post = posts_collection.find_one({'post_id': post_id})
+    if not post:
+        return jsonify({'error': 'Post not found'}), 404
+
+    # Передаємо дані поста в шаблон для редагування
+    return render_template('edit_post.html', post=post)
+
+
+@app.route('/update_post/<post_id>', methods=['POST'])
+def update_post(post_id):
+    post = posts_collection.find_one({'post_id': post_id})
+    if not post:
+        return jsonify({'error': 'Post not found'}), 404
+
+    # Отримуємо оновлені дані з форми
+    content = request.form.get('content')
+    likes = request.form.getlist('likes')
+
+    # Оновлюємо пост
+    updated_fields = {
+        'content': content,
+        'likes': likes
+    }
+    posts_collection.update_one({'post_id': post_id}, {'$set': updated_fields})
+    return redirect(url_for('get_posts'))
+
+
+@app.route('/delete_post/<post_id>', methods=['POST'])
+def delete_post(post_id):
+    result = posts_collection.delete_one({'post_id': post_id})
+    if result.deleted_count == 0:
+        return jsonify({'error': 'Post not found'}), 404
+    return redirect(url_for('get_posts'))
+
+
 @app.route('/insert_users_form', methods=['GET'])
 def insert_users_form():
     # Відображаємо форму для вставки користувачів
@@ -174,3 +211,49 @@ def insert_users():
     ]
     users_collection.insert_many(test_users)
     return redirect(url_for('get_users'))  # Переходимо до списку користувачів
+
+
+@app.route('/insert_posts_form', methods=['GET'])
+def insert_posts_form():
+    # Відображаємо форму для вставки постів
+    return render_template('insert_posts.html')
+
+
+@app.route('/insert_posts', methods=['POST'])
+def insert_posts():
+    # Видаляємо всі пости перед додаванням нових тестових постів
+    posts_collection.delete_many({})
+
+    # Вставляємо тестові пости
+    test_posts = [
+        {
+            'post_id': '1',
+            'user_id': 'Alice',
+            'content': 'This is my first post!',
+            'likes': [],
+            'comments': []
+        },
+        {
+            'post_id': '2',
+            'user_id': 'Bob',
+            'content': 'Data is the new oil.',
+            'likes': [],
+            'comments': []
+        },
+        {
+            'post_id': '3',
+            'user_id': 'Charlie',
+            'content': 'Tech trends of 2024.',
+            'likes': [],
+            'comments': []
+        }
+    ]
+
+    # Додаємо пости в колекцію
+    for post in test_posts:
+        # Перевіряємо, чи існує пост з таким post_id, щоб уникнути дублювання
+        if not posts_collection.find_one({'post_id': post['post_id']}):
+            posts_collection.insert_one(post)
+
+    # Переходимо до списку постів
+    return redirect(url_for('get_posts'))
