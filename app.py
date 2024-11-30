@@ -276,3 +276,52 @@ def add_follower(user_id):
         {'$addToSet': {'following': follower_id}}  # Додає, якщо підписник ще не доданий
     )
     return redirect(url_for('get_users'))  # Повернення до списку користувачів
+
+@app.route('/add_comment_form/<post_id>', methods=['GET'])
+def add_comment_form(post_id):
+    # Отримуємо пост для передачі в шаблон
+    post = posts_collection.find_one({'post_id': post_id})
+    if not post:
+        return jsonify({'error': 'Post not found'}), 404
+
+    # Відображаємо шаблон форми для додавання коментаря
+    return render_template('add_comment.html', post=post)
+
+
+@app.route('/add_comment/<post_id>', methods=['POST'])
+def add_comment(post_id):
+    # Отримуємо дані коментаря з форми
+    comment_data = {
+        'comment_id': str(ObjectId()),  # Генеруємо унікальний ідентифікатор для коментаря
+        'user_id': request.form.get('user_id'),
+        'content': request.form.get('content'),
+        'created_at': datetime.utcnow()
+    }
+
+    # Перевірка обов'язкових полів
+    if not comment_data['user_id'] or not comment_data['content']:
+        return jsonify({'error': 'User ID and content are required'}), 400
+
+    # Додаємо коментар у пост
+    result = posts_collection.update_one(
+        {'post_id': post_id},
+        {'$push': {'comments': comment_data}}
+    )
+
+    if result.matched_count == 0:
+        return jsonify({'error': 'Post not found'}), 404
+
+    return redirect(url_for('get_posts'))
+
+
+@app.route('/view_comments/<post_id>', methods=['GET'])
+def view_comments(post_id):
+    # Отримуємо пост за його ID
+    post = posts_collection.find_one({'post_id': post_id})
+    if not post:
+        return jsonify({'error': 'Post not found'}), 404
+
+    # Відображаємо коментарі у шаблоні
+    return render_template('view_comments.html', post=post)
+
+

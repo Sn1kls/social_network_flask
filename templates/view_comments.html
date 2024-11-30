@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>View Comments</title>
+</head>
+<body>
+    <h1>Comments for Post ID: {{ post['post_id'] }}</h1>
+
+    <ul class="comments-list">
+        {% for comment in post['comments'] %}
+        <li>
+            <p><strong>User ID:</strong> {{ comment['user_id'] }}</p>
+            <p><strong>Comment:</strong> {{ comment['content'] }}</p>
+            <p><small><strong>Created At:</strong> {{ comment['created_at'] }}</small></p>
+        </li>
+        {% else %}
+        <p>No comments yet.</p>
+        {% endfor %}
+    </ul>
+
+    <a href="/posts" class="button">Back to Posts</a>
+</body>
+</html>
