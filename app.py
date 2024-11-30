@@ -139,3 +139,38 @@ def create_post():
 def get_posts():
     posts = posts_collection.find()  # Отримуємо всі пости з MongoDB
     return render_template('posts_list.html', posts=posts)  # Передаємо пости у шаблон
+
+
+@app.route('/insert_users_form', methods=['GET'])
+def insert_users_form():
+    # Відображаємо форму для вставки користувачів
+    return render_template('insert_users.html')
+
+@app.route('/insert_users', methods=['POST'])
+def insert_users():
+    # Вставляємо тестових користувачів
+    test_users = [
+        {
+            'name': 'Alice',
+            'email': 'alice@example.com',
+            'bio': 'Loves coding',
+            'created_at': datetime.utcnow(),
+            'following': []
+        },
+        {
+            'name': 'Bob',
+            'email': 'bob@example.com',
+            'bio': 'Data enthusiast',
+            'created_at': datetime.utcnow(),
+            'following': []
+        },
+        {
+            'name': 'Charlie',
+            'email': 'charlie@example.com',
+            'bio': 'Tech blogger',
+            'created_at': datetime.utcnow(),
+            'following': []
+        }
+    ]
+    users_collection.insert_many(test_users)
+    return redirect(url_for('get_users'))  # Переходимо до списку користувачів
