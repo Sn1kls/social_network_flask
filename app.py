@@ -257,3 +257,22 @@ def insert_posts():
 
     # Переходимо до списку постів
     return redirect(url_for('get_posts'))
+
+
+@app.route('/add_follower_form/<user_id>', methods=['GET'])
+def add_follower_form(user_id):
+    return render_template('add_follower.html', user_id=user_id)
+
+
+@app.route('/add_follower/<user_id>', methods=['POST'])
+def add_follower(user_id):
+    follower_id = request.form.get('follower_id')
+    if not follower_id:
+        return jsonify({'error': 'Follower ID is required'}), 400
+
+    # Оновлення масиву підписників
+    users_collection.update_one(
+        {'_id': ObjectId(user_id)},
+        {'$addToSet': {'following': follower_id}}  # Додає, якщо підписник ще не доданий
+    )
+    return redirect(url_for('get_users'))  # Повернення до списку користувачів
