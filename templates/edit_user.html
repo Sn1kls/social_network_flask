@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Edit User</title>
+</head>
+<body>
+    <h1>Edit User</h1>
+    <form action="/update_user/{{ user['_id'] }}" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ user['name'] }}" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ user['email'] }}" required>
+
+        <label for="bio">Bio:</label>
+        <textarea id="bio" name="bio">{{ user['bio'] }}</textarea>
+
+        <label for="following">Following (comma-separated user IDs):</label>
+        <input type="text" id="following" name="following" value="{{ ', '.join(user['following']) }}">
+
+        <button type="submit">Update User</button>
+    </form>
+    <a href="/users">Back to User List</a>
+</body>
+</html>

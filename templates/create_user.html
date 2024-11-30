@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Create User</title>
+</head>
+<body>
+    <h1>Create a New User</h1>
+    <form action="/create_user" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="bio">Bio:</label>
+        <textarea id="bio" name="bio"></textarea>
+
+        <label for="following">Following (comma-separated user IDs):</label>
+        <input type="text" id="following" name="following">
+
+        <button type="submit">Create User</button>
+    </form>
+    <a href="/users">View All Users</a>
+</body>
+</html>
