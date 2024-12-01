@@ -173,3 +173,29 @@ td form {
     margin: 0;
     padding: 0;
 }
+
+.button-container {
+    display: flex; /* Встановлюємо flexbox для горизонтального вирівнювання */
+    justify-content: center; /* Вирівнюємо кнопки по центру */
+    gap: 15px; /* Встановлюємо відстань між кнопками */
+    flex-wrap: wrap; /* Дозволяємо перенесення на новий рядок, якщо кнопки не вміщуються */
+    margin-top: 20px; /* Відступ зверху */
+}
+
+.button-container a.button {
+    display: inline-block; /* Переводимо кожну кнопку в inline-block */
+    text-align: center; /* Центруємо текст у кнопках */
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    flex: 1; /* Встановлює рівну ширину для всіх кнопок */
+    max-width: 150px; /* Максимальна ширина кнопки */
+}
+
+.button-container a.button:hover {
+    background-color: #0056b3;
+}

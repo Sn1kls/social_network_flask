@@ -137,8 +137,9 @@ def create_post():
 
 @app.route('/posts', methods=['GET'])
 def get_posts():
-    posts = posts_collection.find()  # Отримуємо всі пости з MongoDB
-    return render_template('posts_list.html', posts=posts)  # Передаємо пости у шаблон
+    posts = list(posts_collection.find())
+    users = list(users_collection.find())
+    return render_template('posts_list.html', posts=posts, users=users)
 
 
 @app.route('/edit_post/<post_id>', methods=['GET'])
@@ -370,3 +371,17 @@ def follower_count():
         {'$project': {'name': 1, 'follower_count': {'$size': {'$ifNull': ['$following', []]}}}}
     ])
     return render_template('follower_count.html', followers=list(follower_data))
+
+
+@app.route('/user_feed/<user_id>', methods=['GET'])
+def user_feed(user_id):
+    user = users_collection.find_one({'_id': ObjectId(user_id)})
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    following_ids = user.get('following', [])
+    if not following_ids:
+        return render_template('user_feed.html', posts=[], user=user)
+
+    feed_posts = posts_collection.find({'user_id': {'$in': following_ids}}).sort('created_at', -1).limit(10)
+    return render_template('user_feed.html', posts=list(feed_posts), user=user)

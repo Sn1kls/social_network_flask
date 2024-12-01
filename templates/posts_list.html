@@ -54,7 +54,12 @@
         </tr>
         {% endfor %}
     </table>
-    <a href="/create_post_form" class="button">Create New Post</a>
-    <a href="/top_posts" class="button">Top Posts</a>
+    <div class="button-container">
+        <a href="/create_post_form" class="button">Create New Post</a>
+        <a href="/top_posts" class="button">Top Posts</a>
+        {% for user in users %}
+            <a href="/user_feed/{{ user['_id'] }}" class="button">User Feed for {{ user['name'] }}</a>
+        {% endfor %}
+    </div>
 </body>
 </html>

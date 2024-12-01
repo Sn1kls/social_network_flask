@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>{{ user['name'] }}'s Feed</title>
+</head>
+<body>
+    <h1>{{ user['name'] }}'s Feed</h1>
+    {% if posts %}
+        <ul>
+            {% for post in posts %}
+                <li>
+                    <h2>{{ post['content'] }}</h2>
+                    <p>Posted by: {{ post['user_id'] }}</p>
+                    <p>Likes: {{ post['likes'] | length }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No posts available.</p>
+    {% endif %}
+    <a href="/posts" class="button">Back to Posts</a>
+</body>
+</html>
