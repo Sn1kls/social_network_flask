@@ -120,7 +120,8 @@ def create_post():
             user_id=request.form.get('user_id'),
             content=request.form.get('content'),
             likes=request.form.getlist('likes'),
-            comments=[]  # Коментарі поки залишаються порожніми
+            comments=[],
+            created_at=datetime.utcnow()
         )
 
         # Перевірка унікальності post_id
