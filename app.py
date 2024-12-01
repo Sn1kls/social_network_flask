@@ -183,6 +183,7 @@ def insert_users_form():
     # Відображаємо форму для вставки користувачів
     return render_template('insert_users.html')
 
+
 @app.route('/insert_users', methods=['POST'])
 def insert_users():
     # Вставляємо тестових користувачів
@@ -277,6 +278,7 @@ def add_follower(user_id):
     )
     return redirect(url_for('get_users'))  # Повернення до списку користувачів
 
+
 @app.route('/add_comment_form/<post_id>', methods=['GET'])
 def add_comment_form(post_id):
     # Отримуємо пост для передачі в шаблон
@@ -325,3 +327,26 @@ def view_comments(post_id):
     return render_template('view_comments.html', post=post)
 
 
+@app.route('/add_like/<post_id>', methods=['POST'])
+def add_like(post_id):
+    user_input = request.form.get('user_id')
+    if not user_input:
+        return jsonify({'error': 'User ID or name is required'}), 400
+
+    # Пошук користувача за ObjectId або ім'ям
+    try:
+        user = users_collection.find_one({'_id': ObjectId(user_input)})
+    except:
+        user = users_collection.find_one({'name': user_input})
+
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    # Додаємо ім'я користувача до масиву лайків
+    user_name = user['name']  # Отримуємо ім'я користувача
+    posts_collection.update_one(
+        {'post_id': post_id},
+        {'$addToSet': {'likes': user_name}}  # Зберігаємо ім'я користувача
+    )
+
+    return redirect(url_for('get_posts'))
