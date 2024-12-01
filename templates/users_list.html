@@ -10,7 +10,6 @@
     <h1>List of Users</h1>
     <table>
         <tr>
-            <th>User ID</th>
             <th>Name</th>
             <th>Email</th>
             <th>Bio</th>
@@ -19,7 +18,6 @@
         </tr>
         {% for user in users %}
         <tr>
-            <td>{{ user['_id'] }}</td>
             <td>{{ user['name'] }}</td>
             <td>{{ user['email'] }}</td>
             <td>{{ user['bio'] }}</td>
