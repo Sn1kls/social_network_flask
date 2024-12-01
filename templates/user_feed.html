@@ -14,6 +14,7 @@
                 <li>
                     <h2>{{ post['content'] }}</h2>
                     <p>Posted by: {{ post['user_id'] }}</p>
+                    <p>Created at: {{ post['created_at'] }}</p>
                     <p>Likes: {{ post['likes'] | length }}</p>
                 </li>
             {% endfor %}
