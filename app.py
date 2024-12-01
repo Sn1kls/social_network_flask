@@ -361,3 +361,12 @@ def top_posts():
         {'$limit': 5}  # Беремо лише 5 записів
     ])
     return render_template('top_posts.html', posts=list(popular_posts))
+
+
+@app.route('/follower_count', methods=['GET'])
+def follower_count():
+    # Знаходимо кількість підписників для кожного користувача
+    follower_data = users_collection.aggregate([
+        {'$project': {'name': 1, 'follower_count': {'$size': {'$ifNull': ['$following', []]}}}}
+    ])
+    return render_template('follower_count.html', followers=list(follower_data))

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Follower Count</title>
+</head>
+<body>
+    <h1>Follower Count</h1>
+    <table>
+        <tr>
+            <th>User Name</th>
+            <th>Follower Count</th>
+        </tr>
+        {% for follower in followers %}
+        <tr>
+            <td>{{ follower['name'] }}</td>
+            <td>{{ follower['follower_count'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="/users" class="button">Back to Users</a>
+</body>
+</html>
