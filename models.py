@@ -27,3 +27,4 @@ class PostCreate(BaseModel):
     content: str = Field(..., max_length=1000, example="This is the content of the post.")
     likes: List[str] = Field(default_factory=list)
     comments: List[Comment] = Field(default_factory=list)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
