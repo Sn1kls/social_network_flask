@@ -366,11 +366,17 @@ def top_posts():
 
 @app.route('/follower_count', methods=['GET'])
 def follower_count():
-    # Знаходимо кількість підписників для кожного користувача
-    follower_data = users_collection.aggregate([
-        {'$project': {'name': 1, 'follower_count': {'$size': {'$ifNull': ['$following', []]}}}}
-    ])
-    return render_template('follower_count.html', followers=list(follower_data))
+    # Отримуємо всіх користувачів
+    users = list(users_collection.find())
+
+    # Рахуємо кількість підписників для кожного користувача
+    follower_data = []
+    for user in users:
+        follower_count = users_collection.count_documents({'following': user['name']})
+        follower_data.append({'name': user['name'], 'follower_count': follower_count})
+
+    # Передаємо дані в шаблон
+    return render_template('follower_count.html', followers=follower_data)
 
 
 @app.route('/user_feed/<user_id>', methods=['GET'])
