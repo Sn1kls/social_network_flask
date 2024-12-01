@@ -350,3 +350,14 @@ def add_like(post_id):
     )
 
     return redirect(url_for('get_posts'))
+
+
+@app.route('/top_posts', methods=['GET'])
+def top_posts():
+    # Знаходимо 5 найпопулярніших постів за кількістю вподобань
+    popular_posts = posts_collection.aggregate([
+        {'$project': {'post_id': 1, 'content': 1, 'likes_count': {'$size': {'$ifNull': ['$likes', []]}}}},
+        {'$sort': {'likes_count': -1}},  # Сортуємо за кількістю лайків
+        {'$limit': 5}  # Беремо лише 5 записів
+    ])
+    return render_template('top_posts.html', posts=list(popular_posts))

@@ -25,8 +25,8 @@
         {% for post in posts %}
         <tr>
             <td>{{ post['post_id'] }}</td>
-            <td>{{ post['content'] }}</td>
             <td>{{ post['user_id'] }}</td>
+            <td>{{ post['content'] }}</td>
             <td>
                 {% if post['likes'] %}
                     {{ ', '.join(post['likes']) }}
@@ -35,10 +35,7 @@
                 {% endif %}
             </td>
             <td>
-                <!-- Like Button -->
                 <button onclick="openLikeForm('{{ post['post_id'] }}')" class="like-button">Like</button>
-
-                <!-- Like Form -->
                 <form id="like-form-{{ post['post_id'] }}" action="/add_like/{{ post['post_id'] }}" method="POST" style="display: none; margin-top: 10px;">
                     <label for="user_id_{{ post['post_id'] }}">Enter User Name or User ID:</label>
                     <input type="text" id="user_id_{{ post['post_id'] }}" name="user_id" placeholder="Name or ObjectId" required>
@@ -58,5 +55,6 @@
         {% endfor %}
     </table>
     <a href="/create_post_form" class="button">Create New Post</a>
+    <a href="/top_posts" class="button">Top Posts</a>
 </body>
 </html>
