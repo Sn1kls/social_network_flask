@@ -385,3 +385,10 @@ def user_feed(user_id):
 
     feed_posts = posts_collection.find({'user_id': {'$in': following_ids}}).sort('created_at', -1).limit(10)
     return render_template('user_feed.html', posts=list(feed_posts), user=user)
+
+
+@app.route('/')
+def main_page():
+    users = list(users_collection.find())  # Отримуємо всіх користувачів
+    posts = list(posts_collection.find())  # Отримуємо всі пости
+    return render_template('main.html', users=users, posts=posts)
